@@ -3,19 +3,49 @@ import HourlyForecast from "./components/cards/HourlyForecast";
 import CurrentWeather from "./components/cards/CurrentWeather";
 import Map from "./components/Map";
 import type { Coords } from "./types";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import LocationDropdown from "./components/dropdowns/LocationDropdown";
+import { getCoordsForLocation } from "./api";
+import { useQuery } from "@tanstack/react-query";
+import MapTypeDropdown from "./components/dropdowns/MapTypeDropdown";
+import CurrentWeatherSkeleton from "./components/skeletons/CurrentWeatherSkeleton";
+import DailyForecastSkeleton from "./components/skeletons/DailyForecastSkeleton";
+import HourlyForecastSkeleton from "./components/skeletons/HourlyForecastSkeleton";
 
 function App() {
-  const [coords, setCoords] = useState<Coords>({ lat: 22, lon: 72 });
+  const [coordinates, setCoordinates] = useState<Coords>({ lat: 22, lon: 72 });
+  const [location, setLocation] = useState("Islamabad");
+  const [mapType, setMapType] = useState("clouds_new");
+
+  const { data } = useQuery({
+    queryKey: ["location", location],
+    queryFn: () => getCoordsForLocation(location),
+  });
+
   function onMapClick(lat: number, lon: number) {
-    setCoords({ lat, lon });
+    setCoordinates({ lat, lon });
+    setLocation("custom");
   }
+
+  const coords =
+    location === "custom"
+      ? coordinates
+      : { lat: data?.[0].lat ?? 0, lon: data?.[0].lon ?? 0 };
+
   return (
     <div className="flex flex-col gap-4">
-      <Map coords={coords} onMapClick={onMapClick} />
-      <CurrentWeather coords={coords} />
-      <HourlyForecast coords={coords} />
-      <DailyForecast coords={coords} />
+      <LocationDropdown location={location} setLocation={setLocation} />
+      <MapTypeDropdown mapType={mapType} setMapType={setMapType} />
+      <Map coords={coords} onMapClick={onMapClick} mapType={mapType} />
+      <Suspense fallback={<CurrentWeatherSkeleton />}>
+        <CurrentWeather coords={coords} />
+      </Suspense>
+      <Suspense fallback={<HourlyForecastSkeleton />}>
+        <HourlyForecast coords={coords} />
+      </Suspense>
+      <Suspense fallback={<DailyForecastSkeleton />}>
+        <DailyForecast coords={coords} />
+      </Suspense>
     </div>
   );
 }
