@@ -1,3 +1,4 @@
+import { AirPollutionSchema } from "./schemas/airPollutionSchema";
 import { LocationSchema } from "./schemas/geoCodeSchema";
 import { weatherSchema } from "./schemas/weatherSchema";
 
@@ -21,4 +22,18 @@ export async function getCoordsForLocation(location: string) {
   );
   const data = await resp.json();
   return LocationSchema.parse(data);
+}
+
+export async function getAirPollution({
+  lat,
+  lon,
+}: {
+  lat: number;
+  lon: number;
+}) {
+  const resp = await fetch(
+    `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${import.meta.env.VITE_API_KEY}`,
+  );
+  const data = await resp.json();
+  return AirPollutionSchema.parse(data);
 }
