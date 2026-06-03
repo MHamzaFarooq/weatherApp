@@ -28,13 +28,12 @@ export default function Sidepanel(props: Props) {
   return (
     <div
       className={clsx(
-        "fixed top-0 right-0 h-screen w-(var(--sidebar-width)) shadow-xl bg-sidebar z-1001",
-        isSidepanelOpen ? "translate-x-0" : "translate-x-100",
-        "transition-transform duration-300",
+        "fixed top-0 right-0 h-screen w-(--sidebar-width) shadow-xl bg-sidebar z-1001 overflow-y-scroll transition-transform duration-300 lg:translate-x-0!",
+        isSidepanelOpen ? "translate-x-0" : "translate-x-full",
       )}
     >
       <CloseIcon
-        className="ml-2.5 mt-4 cursor-pointer"
+        className={clsx("ml-2.5 mt-4 cursor-pointer", "lg:hidden")}
         onClick={() => setIsSidepanelOpen(!isSidepanelOpen)}
       />
       <Suspense
@@ -57,7 +56,7 @@ function AirPollution({ coords }: Props) {
     queryFn: () => getAirPollution(coords),
   });
   return (
-    <div className="flex flex-col gap-4 py-4 px-4 overflow-y-auto h-full">
+    <div className="flex flex-col gap-4 py-4 px-4">
       <h1 className="text-2xl">Air Pollution</h1>
       <h1 className="text-5xl">{data.list[0]?.main.aqi}</h1>
       <div className="flex items-center gap-1">

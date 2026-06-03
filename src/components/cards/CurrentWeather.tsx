@@ -36,18 +36,18 @@ function CurrentWeather({ coords }: Props) {
           }).format(new Date(data?.current?.dt * 1000))}
         </h3>
       </div>
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full md:mb-13">
         <div className="flex w-25 flex-col items-center gap-2">
-          <p className="text-gray-500/45">Feels like</p>
-          <p className="text-xl">{Math.round(data?.current?.feels_like)}°C</p>
+          <p className="text-gray-500">Feels like</p>
+          <p className="text-lg">{Math.round(data?.current?.feels_like)}°C</p>
         </div>
         <div className="flex w-25 flex-col items-center gap-2">
-          <p className="text-gray-500/45">Humidity</p>
-          <p className="text-xl">{Math.round(data?.current?.humidity)}%</p>
+          <p className="text-gray-500">Humidity</p>
+          <p className="text-lg">{Math.round(data?.current?.humidity)}%</p>
         </div>
         <div className="flex w-25 flex-col items-center gap-2">
-          <p className="text-gray-500/45">Wind Speed</p>
-          <p className="text-xl">{Math.round(data?.current?.wind_speed)} m/s</p>
+          <p className="text-gray-500">Wind</p>
+          <p className="text-lg">{Math.round(data?.current?.wind_speed)} m/s</p>
         </div>
       </div>
     </Card>

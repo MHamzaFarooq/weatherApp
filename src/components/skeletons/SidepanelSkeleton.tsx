@@ -20,11 +20,6 @@ export default function SidepanelSkeleton({
         "transition-transform duration-300",
       )}
     >
-      <CloseIcon
-        className="ml-2.5 mt-4 cursor-pointer"
-        onClick={() => setIsSidepanelOpen(!isSidepanelOpen)}
-      />
-
       <div className="flex flex-col gap-4 py-4 px-4">
         {/* "Air Pollution" heading */}
         <h1 className="text-2xl">Air Pollution</h1>
