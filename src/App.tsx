@@ -34,7 +34,9 @@ function App() {
   const coords =
     location === "custom"
       ? coordinates
-      : { lat: data?.[0].lat ?? 0, lon: data?.[0].lon ?? 0 };
+      : data?.[0]
+        ? { lat: data[0].lat, lon: data[0].lon }
+        : coordinates; // fallback to last known good position
 
   return (
     <>

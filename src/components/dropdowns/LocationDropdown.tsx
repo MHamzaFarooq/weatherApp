@@ -36,7 +36,7 @@ function LocationDropdown({ location, setLocation }: Props) {
       <SelectContent className="z-1001">
         <SelectGroup>
           {location === "custom" && (
-            <SelectItem value="Custom">Custom</SelectItem>
+            <SelectItem value="custom">Custom</SelectItem>
           )}
 
           {Locations.map((loc) => (

@@ -1,16 +1,16 @@
 import Card from "../cards/Card";
 import { Skeleton } from "@/components/ui/skeleton";
-import CloseIcon from "/src/assets/closeIcon.svg?react";
+// import CloseIcon from "/src/assets/closeIcon.svg?react";
 import clsx from "clsx";
 
 type Props = {
   isSidepanelOpen: boolean;
-  setIsSidepanelOpen: (isOpen: boolean) => void;
+  // setIsSidepanelOpen: (isOpen: boolean) => void;
 };
 
 export default function SidepanelSkeleton({
   isSidepanelOpen,
-  setIsSidepanelOpen,
+  // setIsSidepanelOpen,
 }: Props) {
   return (
     <div
