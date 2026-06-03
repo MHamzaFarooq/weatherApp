@@ -55,10 +55,11 @@ function AirPollution({ coords }: Props) {
     queryKey: ["airPollution", coords],
     queryFn: () => getAirPollution(coords),
   });
+
   return (
     <div className="flex flex-col gap-4 py-4 px-4">
       <h1 className="text-2xl">Air Pollution</h1>
-      <h1 className="text-5xl">{data.list[0]?.main.aqi}</h1>
+      <h1 className="text-5xl">{data?.list?.[0]?.main?.aqi ?? "--"}</h1>
       <div className="flex items-center gap-1">
         <h1 className="text-2xl">AQI</h1>
         <TooltipProvider>
@@ -77,22 +78,23 @@ function AirPollution({ coords }: Props) {
       </div>
 
       {Object.entries(data.list[0].components).map(([key, value]) => {
-        const pollutant =
-          airQualityRanges[key.toUpperCase() as keyof typeof airQualityRanges];
-        const max = pollutant["Very Poor"].min;
-        const currentStatus = (() => {
-          for (const [status, range] of Object.entries(pollutant)) {
-            if (
-              value >= range.min &&
-              (range.max === null || value <= range.max)
-            ) {
-              return status;
-            }
-          }
-        })();
-        const pollutantName = Object.entries(pollutantNameMapping).find(
-          ([pollutantKey]) => pollutantKey === key.toUpperCase(),
-        )?.[1];
+        const upperKey = key.toUpperCase() as keyof typeof airQualityRanges;
+        const pollutant = airQualityRanges[upperKey];
+
+        // Skip unknown pollutants gracefully
+        if (!pollutant) return null;
+
+        // Use a fixed high value as the slider ceiling, not "Very Poor".min
+        const max = pollutant["Very Poor"].min * 1.5;
+
+        const currentStatus: string =
+          Object.entries(pollutant).find(([, range]) => {
+            return (
+              value >= range.min && (range.max === null || value <= range.max)
+            );
+          })?.[0] ?? "Unknown";
+
+        const pollutantName = pollutantNameMapping[upperKey] ?? key;
 
         return (
           <Card
@@ -104,12 +106,18 @@ function AirPollution({ coords }: Props) {
               <span>{pollutantName}</span>
               <span>{value}</span>
             </div>
-            <Slider disabled value={[value]} max={max} min={0} step={1} />
+            <Slider
+              disabled
+              value={[Math.min(value, max)]}
+              max={max}
+              min={0}
+              step={1}
+            />
             <div className="flex justify-between mt-2">
               <span className="text-xs text-muted-foreground w-20">0</span>
               <span className="text-sm">{currentStatus}</span>
               <span className="text-sm text-muted-foreground w-20 text-right">
-                {max}
+                {pollutant["Very Poor"].min}+
               </span>
             </div>
           </Card>
