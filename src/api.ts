@@ -18,7 +18,7 @@ export async function getWeatherData({
 
 export async function getCoordsForLocation(location: string) {
   const resp = await fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${import.meta.env.VITE_API_KEY}`,
+    `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${import.meta.env.VITE_API_KEY}`,
   );
   const data = await resp.json();
   return LocationSchema.parse(data);
@@ -32,7 +32,7 @@ export async function getAirPollution({
   lon: number;
 }) {
   const resp = await fetch(
-    `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${import.meta.env.VITE_API_KEY}`,
+    `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${import.meta.env.VITE_API_KEY}`,
   );
   const data = await resp.json();
   return AirPollutionSchema.parse(data);
