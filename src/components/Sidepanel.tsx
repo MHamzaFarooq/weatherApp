@@ -40,7 +40,7 @@ export default function Sidepanel(props: Props) {
         fallback={
           <SidepanelSkeleton
             isSidepanelOpen={isSidepanelOpen}
-            setIsSidepanelOpen={setIsSidepanelOpen}
+            // setIsSidepanelOpen={setIsSidepanelOpen}
           />
         }
       >
